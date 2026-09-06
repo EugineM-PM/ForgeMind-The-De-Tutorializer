@@ -53,18 +53,60 @@ export const INITIAL_CONCEPTS: Concept[] = [
       ],
       expectedOutputFormat: 'Executive Decision Memo (RICE breakdown, vulnerability analysis, final call)'
     },
+    evaluationCriteria: [
+      'Identification and mathematical resolution of Reach unit-of-analysis mismatch (accounts vs sensors/revenue exposure)',
+      'Correction of 100% verbal sales confidence using empirical discount factors (30-50%)',
+      'Accurate RICE formula computation across competing initiatives under 6 engineer-month budget ceiling',
+      'Formulation of capacity packaging respecting the constraint (Titan + Apex = 6, or Bedrock + Apex = 5)',
+      'Mathematical sensitivity threshold where roadmap priority inverts'
+    ],
+    referenceSolution: `1. Unit Normalization:
+Evaluating Reach by customer account severely punishes Enterprise projects (5 vs 520). If normalized by revenue reach or operational volume (sensors), Bedrock and Apex represent >60% of commercial exposure. Even under pure account scoring:
+Titan: Reach 520 × Impact 2 × Conf 0.8 / Effort 4 = 208
+Bedrock: Reach 148 × Impact 3 × Conf 0.5 / Effort 3 = 74
+Apex (Uncorrected): Reach 5 × Impact 3 × Conf 1.0 / Effort 2 = 7.5
+
+2. Confidence Correction:
+Sales "100% verbal certainty" violates RICE empirical principles. In enterprise B2B SaaS, verbal intent without signed SOW/penalty clause warrants at most 30%-50% confidence. If Apex confidence is discounted to 40%, its account-based score drops to 3.0.
+However, if evaluated on ARR Reach (units of $100k ARR):
+Titan ARR Reach = 520 × $6k = $3.12M (31.2 units) -> RICE = (31.2 × 2 × 0.8)/4 = 12.48
+Bedrock ARR Reach = $4.8M (48 units) -> RICE = (48 × 3 × 0.5)/3 = 24.0
+Apex ARR Reach = $1.2M (12 units) -> RICE = (12 × 3 × 0.4)/2 = 7.2
+
+3. Capacity Packaging (6 Eng-Months Max):
+Deliver Titan (4 mo) + Apex (2 mo) = 6 mo, OR Bedrock (3 mo) + Apex (2 mo) = 5 mo.
+Recommendation: Prioritize Titan + Apex if churn reduction among mid-market is critical, or Bedrock + Apex if enterprise churn risk threatens Series B metrics.
+Inversion Threshold: Apex flips out of the roadmap if Enterprise renewal churn can be mitigated via a manual escrow agreement or if Titan effort expands past 5 months.`,
     hints: [
       {
         tier: 1,
-        title: 'Formulation Check',
-        hint: 'Remember: RICE = (Reach × Impact × Confidence) / Effort. Pay special attention to how Reach is quantified for multi-tenant accounts vs individual users.',
-        penaltyDescription: '-10% on Raw Independence'
+        title: 'Examine the Measuring Tape (Nudge)',
+        hint: 'Look closely at the Reach numbers across the three projects. Is counting 5 enterprise conglomerates on the same scale as counting 520 small contractors a fair comparison?',
+        penaltyDescription: '-5% on Raw Independence'
       },
       {
         tier: 2,
-        title: 'Sensitivity Analysis',
-        hint: 'Examine what happens to Feature A\'s score if the verbal intent confidence drops from 50% to 20% (standard B2B sales pipeline discount).',
-        penaltyDescription: '-25% on Raw Independence'
+        title: 'Check the Confidence Multiplier (Direction)',
+        hint: 'Sales claims 100% confidence for Project Apex. In RICE, 100% is reserved for airtight quantitative telemetry. What happens to the math when you apply an empirical B2B pipeline discount (e.g. 30%-50%)?',
+        penaltyDescription: '-12% on Raw Independence'
+      },
+      {
+        tier: 3,
+        title: 'The Core RICE Formula and Capacity Ceiling (Concept reminder)',
+        hint: 'RICE Score = (Reach × Impact × Confidence) / Effort. You have a hard capacity ceiling of 6 engineer-months. Calculate the individual scores and test which combination (Titan + Apex = 6, or Bedrock + Apex = 5) maximizes collective return.',
+        penaltyDescription: '-20% on Raw Independence'
+      },
+      {
+        tier: 4,
+        title: 'Step-by-Step Calculation Breakdown (Structural guidance)',
+        hint: '1) Calculate raw account RICE: Titan = (520×2×0.8)/4 = 208; Bedrock = (148×3×0.5)/3 = 74; Apex = (5×3×1.0)/2 = 7.5. 2) Show how measuring by revenue/sensors shifts Bedrock. 3) Select the winning pair within the 6-month budget.',
+        penaltyDescription: '-35% on Raw Independence'
+      },
+      {
+        tier: 5,
+        title: 'Full Model Resolution and Trade-off Defense (Solution reveal)',
+        hint: 'Recommend shipping Titan (4 months) and Apex (2 months), meeting the 6-month capacity cap. Bedrock must be deferred to Q4 because prototype field variance (50% confidence) introduces delivery risk. Apex is included despite low raw account score because its 2-month effort allows pairing with Titan to secure the $1.2M renewal.',
+        penaltyDescription: '-60% on Raw Independence'
       }
     ]
   },
@@ -494,7 +536,7 @@ export const INITIAL_CONCEPTS: Concept[] = [
   // ==========================================
   {
     id: 'sql-joins',
-    name: 'SQL JOINs',
+    name: 'SQL JOIN Logic',
     domain: 'SQL / Data',
     description: 'Relational algebra combining rows across tables: INNER, LEFT, RIGHT, FULL OUTER, CROSS JOIN, and relational cardinality preservation.',
     underlyingSkill: 'Preserving correct row cardinality and aggregate calculations across one-to-many and many-to-many relational joins.',
@@ -508,7 +550,8 @@ export const INITIAL_CONCEPTS: Concept[] = [
     reasoningMilestones: [
       'Trace row duplication when joining multiple 1-to-many child tables to a single parent row',
       'Isolate aggregate metrics into independent CTEs or subqueries before performing parent joins',
-      'Verify that resulting totals match source transactional truth'
+      'Verify that resulting totals match source transactional truth',
+      'Preserve zero-activity parent entities using outer joins with COALESCE null fallbacks'
     ],
     decisionPoints: [
       'Choose between pre-aggregating in CTEs vs using window functions or correlated subqueries',
@@ -526,21 +569,89 @@ export const INITIAL_CONCEPTS: Concept[] = [
     difficultyLevels: ['Foundational', 'Applied', 'Advanced'],
     approximateDifficulty: 'Applied (Data / Analytics Engineer)',
     challengePreview: {
-      title: 'The Quadrupled Revenue Incident',
-      scenario: 'An analyst joins `orders` to `order_items` and `order_discounts`. Because one order has 3 items and 2 discount coupons, the joined total revenue shows 6x the actual monetary transactions in executive reporting.',
-      task: 'Write a robust query that calculates the true order total, discount total, and item count without row duplication.',
+      title: 'The Phantom Multi-Currency Merchant Ledger Explosion',
+      scenario: 'You are the lead data engineer for a global payments gateway. The financial reconciliation pipeline is reporting an alarming $4.2M discrepancy between daily settlement batches and bank payout logs. The junior analyst wrote a query joining the `merchants` table to `transactions`, `refunds`, and `fee_surcharges`. Because high-volume merchants frequently have multiple transactions, multiple refunds, and multiple fee adjustments on the same business day, the query produced a Cartesian fan-out that multiplied ledger totals by up to 12x.',
+      task: 'Deconstruct why the current join topology triggers row duplication, write a robust production-grade SQL query that preserves absolute transactional cardinality and monetary precision, and explain why naive fixes like SELECT DISTINCT fail at scale.',
       constraints: [
-        'Avoid `SELECT DISTINCT` band-aids that mask underlying join mechanics.',
-        'Demonstrate proper pre-aggregation or correlated subqueries.'
+        'Avoid `SELECT DISTINCT` band-aids that mask underlying join mechanics or drop legitimate duplicate amounts.',
+        'Demonstrate proper pre-aggregation in CTEs or derived subqueries.',
+        'Preserve zero-activity merchants using outer joins with COALESCE null fallbacks.'
       ],
-      expectedOutputFormat: 'Production SQL Query with Explanation'
+      expectedOutputFormat: 'Production SQL Query with Architectural Explanation'
     },
+    evaluationCriteria: [
+      'Diagnosis of Cartesian row multiplication (fan-out) across multiple 1-to-many child tables',
+      'Rejection of SUM(DISTINCT amount) anti-pattern which discards legitimate identical values',
+      'Pre-aggregation of child tables in CTEs or derived tables prior to joining parent entity',
+      'Preservation of zero-transaction merchants using outer joins with COALESCE null fallbacks',
+      'Production-grade SQL query preserving absolute transactional cardinality'
+    ],
+    referenceSolution: `1. Diagnostic:
+When a merchant has 4 transactions, 2 refunds, and 3 surcharges on the same day, joining them directly creates 4 × 2 × 3 = 24 rows for that single merchant. Every transaction amount is summed 6 times, every refund 12 times, and every fee 8 times.
+
+2. Production SQL:
+WITH daily_txns AS (
+  SELECT merchant_id,
+         SUM(gross_amount) AS total_gross
+  FROM transactions
+  WHERE created_at >= '2026-09-01 00:00:00' AND created_at < '2026-09-02 00:00:00'
+  GROUP BY merchant_id
+),
+daily_refunds AS (
+  SELECT merchant_id,
+         SUM(refunded_amount) AS total_refunded
+  FROM refunds
+  WHERE created_at >= '2026-09-01 00:00:00' AND created_at < '2026-09-02 00:00:00'
+  GROUP BY merchant_id
+),
+daily_fees AS (
+  SELECT merchant_id,
+         SUM(fee_amount) AS total_fees
+  FROM fee_surcharges
+  WHERE created_at >= '2026-09-01 00:00:00' AND created_at < '2026-09-02 00:00:00'
+  GROUP BY merchant_id
+)
+SELECT m.merchant_id,
+       m.business_name,
+       COALESCE(dt.total_gross, 0) AS total_gross,
+       COALESCE(dr.total_refunded, 0) AS total_refunded,
+       COALESCE(df.total_fees, 0) AS total_fees
+FROM merchants m
+LEFT JOIN daily_txns dt ON m.merchant_id = dt.merchant_id
+LEFT JOIN daily_refunds dr ON m.merchant_id = dr.merchant_id
+LEFT JOIN daily_fees df ON m.merchant_id = df.merchant_id
+WHERE m.status = 'ACTIVE'
+ORDER BY m.merchant_id;`,
     hints: [
       {
         tier: 1,
-        title: 'Pre-aggregation Pattern',
-        hint: 'Aggregate `order_items` and `order_discounts` separately by `order_id` in CTEs or derived subqueries before joining back to `orders`.',
-        penaltyDescription: '-10% on Raw Independence'
+        title: 'Row Multiplication Trace (Nudge)',
+        hint: 'If merchant #10 has 3 orders and 2 refunds, how many rows does the FROM clause produce before the GROUP BY executes?',
+        penaltyDescription: '-5% on Raw Independence'
+      },
+      {
+        tier: 2,
+        title: 'The Timing of the Aggregation (Direction)',
+        hint: 'The query aggregates AFTER joining multiple 1-to-many tables. What happens if you aggregate BEFORE joining?',
+        penaltyDescription: '-12% on Raw Independence'
+      },
+      {
+        tier: 3,
+        title: 'Cartesian Fan-Out and Pre-Aggregation (Concept reminder)',
+        hint: 'Multiple independent 1-to-many joins multiply rows (M × N). To prevent fan-out, isolate each child table\'s SUM into its own CTE or subquery grouped by merchant_id first.',
+        penaltyDescription: '-20% on Raw Independence'
+      },
+      {
+        tier: 4,
+        title: 'CTE Architecture Blueprint (Structural guidance)',
+        hint: 'Create three CTEs: one for transactions, one for refunds, and one for fees. Each should group by `merchant_id` and calculate the respective SUM. Then LEFT JOIN all three to `merchants` using `COALESCE(col, 0)`.',
+        penaltyDescription: '-35% on Raw Independence'
+      },
+      {
+        tier: 5,
+        title: 'Complete Production Query Blueprint (Solution reveal)',
+        hint: 'Write CTEs `daily_txns`, `daily_refunds`, and `daily_fees` with single-table groupings. In the outer query, SELECT from `merchants` and LEFT JOIN each CTE on `merchant_id`. Wrap sums in `COALESCE(..., 0)` to handle inactive days without losing merchants.',
+        penaltyDescription: '-60% on Raw Independence'
       }
     ]
   },
@@ -737,12 +848,15 @@ export function getConceptById(id: string): Concept | undefined {
       const raw = localStorage.getItem('forgemind_user_concepts');
       if (raw) {
         const userConcepts: Concept[] = JSON.parse(raw);
-        const found = userConcepts.find((c) => c.id === id);
+        const found = userConcepts.find((c) => c.id === id || (id === 'sql-join-logic' && c.id === 'sql-joins'));
         if (found) return found;
       }
     } catch {
       // ignore
     }
+  }
+  if (id === 'sql-join-logic' || id === 'sql-joins') {
+    return INITIAL_CONCEPTS.find((c) => c.id === 'sql-joins' || c.id === 'sql-join-logic');
   }
   return INITIAL_CONCEPTS.find((c) => c.id === id);
 }

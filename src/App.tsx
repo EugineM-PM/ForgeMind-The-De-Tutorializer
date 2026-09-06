@@ -76,7 +76,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0c0d12] text-[#e4e5eb] flex flex-col selection:bg-amber-500/20 selection:text-amber-200">
+    <div className="min-h-screen bg-[#FAFAF9] text-slate-900 flex flex-col selection:bg-[#006BFF] selection:text-white">
       {/* Navigation Header */}
       <Header currentTab={currentTab} onNavigate={handleNavigate} />
 
@@ -122,31 +122,31 @@ export default function App() {
         )}
       </main>
 
-      {/* Minimal, Credible Footer */}
-      <footer className="border-t border-zinc-900 bg-[#090a0e] py-8 text-xs text-zinc-500">
+      {/* Clean Modern Footer */}
+      <footer className="border-t border-slate-200 bg-white py-8 text-xs text-slate-500">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 sm:flex-row sm:px-6 lg:px-8">
           <div className="flex items-center space-x-3">
-            <span className="font-serif font-medium text-zinc-300">ForgeMind</span>
-            <span className="text-zinc-700">|</span>
-            <span className="italic text-zinc-400">"You learned it. Now prove you can use it."</span>
+            <span className="font-display font-semibold text-slate-900">ForgeMind</span>
+            <span className="text-slate-300">|</span>
+            <span className="italic text-slate-600">"You learned it. Now prove you can use it."</span>
           </div>
 
-          <div className="flex items-center space-x-6">
+          <div className="flex items-center space-x-6 text-slate-600 font-medium">
             <button
               onClick={() => handleNavigate('prove')}
-              className="hover:text-zinc-300 transition-colors"
+              className="hover:text-brand-500 transition-colors"
             >
               Prove
             </button>
             <button
               onClick={() => handleNavigate('material')}
-              className="hover:text-zinc-300 transition-colors"
+              className="hover:text-brand-500 transition-colors"
             >
               Study Material
             </button>
             <button
               onClick={() => handleNavigate('evidence')}
-              className="hover:text-zinc-300 transition-colors"
+              className="hover:text-brand-500 transition-colors"
             >
               My Evidence
             </button>

@@ -1,15 +1,36 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Instrument Sans", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-serif: "Newsreader", Georgia, serif;
+  --font-sans: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-display: "Plus Jakarta Sans", "Inter", system-ui, -apple-system, sans-serif;
   --font-mono: "JetBrains Mono", monospace;
+  --color-brand-50: #eff6ff;
+  --color-brand-100: #dbeafe;
+  --color-brand-500: #006bff;
+  --color-brand-600: #005ce6;
+  --color-brand-700: #004ec4;
+  --color-navy-900: #0b3558;
+  --color-navy-950: #0f172a;
 }
 
 body {
   font-family: var(--font-sans);
-  background-color: #0c0d12;
-  color: #e4e5eb;
+  background-color: #fafaf9;
+  color: #0f172a;
   min-height: 100vh;
 }
+
+/* Reusable visual tokens from the walkthrough design system */
+.shadow-dock {
+  box-shadow: 0 12px 32px -4px rgba(15, 23, 42, 0.12), 0 0 0 1px rgba(226, 232, 240, 0.85);
+}
+
+.shadow-card {
+  box-shadow: 0 20px 48px -12px rgba(15, 23, 42, 0.07), 0 0 0 1px rgba(226, 232, 240, 0.75);
+}
+
+.shadow-dropdown {
+  box-shadow: 0 20px 40px -10px rgba(15, 23, 42, 0.14), 0 0 0 1px rgba(226, 232, 240, 0.9);
+}
+
 

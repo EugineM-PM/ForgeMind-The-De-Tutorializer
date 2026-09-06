@@ -24,6 +24,8 @@ export interface Concept {
   commonFailureModes: string[];
   difficultyLevels: DifficultyLevel[];
   approximateDifficulty?: string;
+  evaluationCriteria?: string[];
+  referenceSolution?: string;
   
   // Scenarios and hints stored for the challenge phase
   challengePreview: ChallengeScenario;
@@ -108,6 +110,9 @@ export interface GeneratedChallenge {
   expectedOutputFormat: string;
   
   // Hidden Evaluation Metadata (not shown during independent attempt)
+  underlyingSkill?: string;
+  capabilityMilestones?: string[];
+  evaluationCriteria?: string[];
   capabilityTested: string;
   structuralMilestones: string[];
   acceptableAlternativeReasoning: string[];

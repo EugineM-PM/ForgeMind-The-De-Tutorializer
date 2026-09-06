@@ -35,6 +35,21 @@ INITIATIVE 3: Project Apex (Enterprise ERP Multi-Entity Billing)
       'Provide an executive trade-off justification showing which single initiative gets cut due to the 6 engineer-month capacity ceiling.'
     ],
     expectedOutputFormat: 'Executive Prioritization Brief: 1) Normalized RICE Table; 2) Confidence Discount & Unit Rationale; 3) Capacity Cut Recommendation; 4) Inversion Sensitivity Threshold.',
+    underlyingSkill: 'Prioritizing competing initiatives using structured trade-offs, normalizing divergent reach units, and correcting stakeholder confidence bias.',
+    capabilityMilestones: [
+      'Deconstruct raw stakeholder claims into quantifiable unit dimensions',
+      'Identify unit mismatches between enterprise prospective accounts and contractor fleet sensor density',
+      'Penalize verbal sales pipeline sentiment using disciplined confidence discount factors',
+      'Formulate optimal initiative packaging respecting 6 engineer-month capacity ceiling',
+      'Establish a mathematical sensitivity threshold where the decision inverts'
+    ],
+    evaluationCriteria: [
+      'Resolves Reach unit mismatch between enterprise accounts vs telematics sensor volume',
+      'Discounts Sales Director 100% verbal certainty to realistic B2B pipeline level (20-50%)',
+      'Computes raw vs adjusted RICE scores across Titan, Bedrock, and Apex',
+      'Articulates explicit capacity trade-off packaging respecting 6 engineer-month budget',
+      'Defines mathematical sensitivity inversion threshold for roadmap flipping'
+    ],
     capabilityTested: 'Prioritizing competing initiatives using structured trade-offs, normalizing divergent reach units, and correcting stakeholder confidence bias.',
     structuralMilestones: [
       'Recognize the unit mismatch: measuring accounts vs measuring sensors/revenue exposure across initiatives',
@@ -105,7 +120,7 @@ Inversion Threshold: Apex flips out of the roadmap if Enterprise renewal churn c
   'sql-joins': {
     id: 'novel-sql-joins-fintech-ledger',
     conceptId: 'sql-joins',
-    conceptName: 'SQL JOINs',
+    conceptName: 'SQL JOIN Logic',
     domain: 'SQL / Data',
     difficulty: 'Applied (Data / Analytics Engineer)',
     sourceType: 'LIBRARY',
@@ -136,6 +151,20 @@ GROUP BY m.merchant_id, m.business_name;`,
       'Explain the computational difference between pre-aggregating in Common Table Expressions (CTEs) vs correlated subqueries.'
     ],
     expectedOutputFormat: '1) Diagnostic of Fan-out Mechanics; 2) Validated Production SQL Query; 3) Performance & Edge-case Defense.',
+    underlyingSkill: 'Preserving relational cardinality and monetary precision across multiple one-to-many joins using pre-aggregation patterns.',
+    capabilityMilestones: [
+      'Diagnose Cartesian row multiplication across independent 1-to-many child tables',
+      'Reject SUM(DISTINCT) anti-pattern which silently corrupts monetary transaction sums',
+      'Isolate child table aggregations into CTEs grouped by parent entity prior to joining',
+      'Preserve zero-activity parent entities using outer joins with COALESCE null fallbacks'
+    ],
+    evaluationCriteria: [
+      'Diagnosis of Cartesian row multiplication (fan-out) across multiple 1-to-many child tables',
+      'Rejection of SUM(DISTINCT amount) anti-pattern which discards legitimate identical values',
+      'Pre-aggregation of child tables in CTEs or derived tables prior to joining parent entity',
+      'Preservation of zero-transaction merchants using outer joins with COALESCE null fallbacks',
+      'Production-grade SQL query preserving absolute transactional cardinality'
+    ],
     capabilityTested: 'Preserving relational cardinality and monetary precision across multiple one-to-many joins using pre-aggregation patterns.',
     structuralMilestones: [
       'Identify that joining two or more independent 1-to-many child tables causes an M × N Cartesian product for each parent row',
@@ -322,6 +351,12 @@ Assembly: Format chunks with clear provenance headers. Place the most recent ame
   }
 };
 
+// Alias sql-join-logic to sql-joins for seamless lookup
+CURATED_NOVEL_CHALLENGES['sql-join-logic'] = CURATED_NOVEL_CHALLENGES['sql-joins'];
+
 export function getCuratedNovelChallenge(conceptId: string): GeneratedChallenge | undefined {
+  if (conceptId === 'sql-join-logic' || conceptId === 'sql-joins') {
+    return CURATED_NOVEL_CHALLENGES['sql-joins'];
+  }
   return CURATED_NOVEL_CHALLENGES[conceptId];
 }

@@ -21,23 +21,23 @@ export const ActiveHintsDrawer: React.FC<ActiveHintsDrawerProps> = ({
   return (
     <div
       id="active-hints-drawer"
-      className="mb-6 rounded-xl border border-amber-500/30 bg-amber-500/5 p-4 transition-all"
+      className="mb-6 rounded-2xl border border-blue-200 bg-blue-50/50 p-4 sm:p-5 transition-all shadow-sm"
     >
       <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-2.5">
-          <div className="flex h-7 w-7 items-center justify-center rounded-lg border border-amber-500/30 bg-amber-500/10 text-amber-400">
+        <div className="flex items-center space-x-3">
+          <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-blue-100 text-[#006BFF]">
             <Lightbulb className="h-4 w-4" />
           </div>
           <div>
             <div className="flex items-center space-x-2">
-              <span className="text-xs font-semibold font-mono uppercase tracking-wider text-amber-300">
+              <span className="text-xs font-bold uppercase tracking-wider text-[#006BFF]">
                 Active Guidance (Unlocked Tiers 1–{hintState.current_tier})
               </span>
-              <span className="rounded bg-amber-500/10 px-1.5 py-0.2 text-[10px] font-mono text-amber-300 border border-amber-500/20">
+              <span className="rounded-full bg-blue-100 px-2 py-0.5 text-[10px] font-semibold text-[#006BFF] border border-blue-200">
                 Retry Attempt Mode
               </span>
             </div>
-            <p className="text-[11px] text-zinc-400">
+            <p className="text-xs text-slate-500">
               Apply this guidance to revise your reasoning and address missing milestones.
             </p>
           </div>
@@ -46,15 +46,15 @@ export const ActiveHintsDrawer: React.FC<ActiveHintsDrawerProps> = ({
         <button
           type="button"
           onClick={() => setIsExpanded(!isExpanded)}
-          className="flex items-center space-x-1 rounded-md border border-zinc-800 bg-zinc-900/80 px-2 py-1 text-xs text-zinc-400 hover:text-zinc-200 transition-colors"
+          className="flex items-center space-x-1.5 rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-600 hover:text-slate-900 transition-colors shadow-sm"
         >
           <span>{isExpanded ? 'Hide Guidance' : 'Show Guidance'}</span>
-          {isExpanded ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
+          {isExpanded ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
         </button>
       </div>
 
       {isExpanded && (
-        <div className="mt-3.5 space-y-2.5 border-t border-amber-500/20 pt-3">
+        <div className="mt-4 space-y-2.5 border-t border-blue-100 pt-3">
           {hintState.unlocked_tiers.map((tierNum) => {
             const tierDef = HINT_TIER_DEFINITIONS[tierNum];
             const storedHint = challenge.hints?.find((h) => h.tier === tierNum);
@@ -63,26 +63,26 @@ export const ActiveHintsDrawer: React.FC<ActiveHintsDrawerProps> = ({
             return (
               <div
                 key={tierNum}
-                className="rounded-lg border border-amber-500/20 bg-zinc-950/80 p-3 text-xs"
+                className="rounded-xl border border-slate-200 bg-white p-3.5 text-xs shadow-sm"
               >
                 <div className="flex items-center justify-between mb-1.5">
                   <div className="flex items-center space-x-2">
-                    <span className="font-mono font-bold text-amber-400 text-[11px] uppercase tracking-wider">
+                    <span className="font-bold text-[#006BFF] text-xs uppercase tracking-wider">
                       {tierDef.fullTitle}
                     </span>
                     {storedHint && (
-                      <span className="text-[11px] text-zinc-400 font-medium">
+                      <span className="text-xs text-slate-500 font-medium">
                         • {storedHint.title}
                       </span>
                     )}
                   </div>
-                  <span className="inline-flex items-center space-x-1 text-[10px] font-mono text-emerald-400">
-                    <CheckCircle2 className="h-3 w-3" />
+                  <span className="inline-flex items-center space-x-1 text-xs font-semibold text-emerald-600">
+                    <CheckCircle2 className="h-3.5 w-3.5" />
                     <span>Unlocked</span>
                   </span>
                 </div>
 
-                <p className="text-zinc-200 text-xs leading-relaxed">
+                <p className="text-slate-700 text-xs leading-relaxed">
                   {storedHint ? storedHint.hint : challenge.referenceSolution}
                 </p>
               </div>

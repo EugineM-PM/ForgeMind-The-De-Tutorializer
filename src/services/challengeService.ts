@@ -14,6 +14,33 @@ export async function generateNovelChallenge(
   difficulty?: DifficultyLevel | string,
   sourceType: ChallengeSourceType = 'LIBRARY'
 ): Promise<GenerateChallengeResult> {
+  // CRITICAL MANDATE: Content Library challenges are pre-authored.
+  // DO NOT call Gemini to generate these challenges at runtime.
+  // The learner selecting a library concept immediately receives the stored challenge.
+  if (sourceType === 'LIBRARY') {
+    const curated = getCuratedNovelChallenge(concept.id);
+    if (curated) {
+      // Background sync to server store so server knows active challenge
+      fetch('/api/generate-challenge', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          concept,
+          difficulty: difficulty || concept.approximateDifficulty || 'Applied',
+          sourceType: 'LIBRARY'
+        })
+      }).catch(() => {});
+
+      return {
+        success: true,
+        challenge: { ...curated, sourceType: 'LIBRARY' },
+        source: 'curated-baseline'
+      };
+    }
+  }
+
   try {
     const response = await fetch('/api/generate-challenge', {
       method: 'POST',
